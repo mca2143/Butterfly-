@@ -131,12 +131,10 @@
     <div id="butterfly-layer"></div>
 
     <!-- Top Music Control Bar (Visible after opening box) -->
-    <div id="musicBar" class="hidden fixed top-4 right-4 z-40">
-        <button id="musicToggleBtn" onclick="toggleMusic()" class="glass-card px-4 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/15 transition shadow-lg">
-            <span id="musicIcon">🔊</span>
-            <span id="musicStatus">Munbe Vaa BGM Playing</span>
-        </button>
-    </div>
+    <audio id="bgMusic" loop preload="auto">
+    <source src="./Munbe_Vaa_bgm____bgm_Whatsapp_status...(48k).mp3" type="audio/mpeg">
+    <source src="./birthday-song.mp3" type="audio/mpeg">
+</audio>
 
     <!-- STEP 1: INITIAL SURPRISE GIFT BOX SCREEN -->
     <div id="introScreen" class="z-20 flex flex-col items-center justify-center text-center px-6 py-12 max-w-md mx-auto">
@@ -239,7 +237,7 @@
         <!-- Modal Header -->
         <div class="flex items-center justify-between px-5 py-4 border-b border-white/10">
             <div>
-                <h2 class="script-font text-3xl sm:text-4xl text-pink-300">Sweetha's Memories 🦋</h2>
+                <h2 class="script-font text-3xl sm:text-4xl text-pink-300">My butterfly's🦋🦋Memories 🦋</h2>
                 <p class="text-xs text-purple-200/75">Tap any photo or video to view full screen</p>
             </div>
             <button onclick="closeAlbumModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-lg font-bold">
