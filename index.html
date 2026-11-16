@@ -16,11 +16,8 @@
             min-height: 100vh;
             margin: 0;
         }
-        .script-font {
-            font-family: 'Great Vibes', cursive;
-        }
+        .script-font { font-family: 'Great Vibes', cursive; }
 
-        /* Floating Butterfly Animation */
         .butterfly {
             position: fixed;
             z-index: 5;
@@ -29,65 +26,35 @@
             filter: drop-shadow(0 0 8px rgba(232, 121, 249, 0.75));
         }
 
-        .wing-left {
-            transform-origin: right center;
-            animation: flapLeft 0.35s ease-in-out infinite alternate;
-        }
+        .wing-left { transform-origin: right center; animation: flapLeft 0.35s ease-in-out infinite alternate; }
+        .wing-right { transform-origin: left center; animation: flapRight 0.35s ease-in-out infinite alternate; }
 
-        .wing-right {
-            transform-origin: left center;
-            animation: flapRight 0.35s ease-in-out infinite alternate;
-        }
-
-        @keyframes flapLeft {
-            0% { transform: scaleX(1) rotate(0deg); }
-            100% { transform: scaleX(0.35) rotate(-12deg); }
-        }
-
-        @keyframes flapRight {
-            0% { transform: scaleX(1) rotate(0deg); }
-            100% { transform: scaleX(0.35) rotate(12deg); }
-        }
+        @keyframes flapLeft { 0% { transform: scaleX(1) rotate(0deg); } 100% { transform: scaleX(0.35) rotate(-12deg); } }
+        @keyframes flapRight { 0% { transform: scaleX(1) rotate(0deg); } 100% { transform: scaleX(0.35) rotate(12deg); } }
 
         @keyframes floatPath {
-            0% {
-                transform: translateY(105vh) translateX(0px) rotate(0deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(105vh) translateX(0px) rotate(0deg); opacity: 0; }
             10% { opacity: 0.95; }
             50% { transform: translateY(50vh) translateX(45px) rotate(10deg); }
             90% { opacity: 0.95; }
-            100% {
-                transform: translateY(-15vh) translateX(-35px) rotate(-10deg);
-                opacity: 0;
-            }
+            100% { transform: translateY(-15vh) translateX(-35px) rotate(-10deg); opacity: 0; }
         }
 
-        /* Gift Box / Envelope Pulse */
         .box-glow {
             box-shadow: 0 0 40px rgba(236, 72, 153, 0.45), 0 0 80px rgba(168, 85, 247, 0.25);
             animation: gentlePulse 2.5s ease-in-out infinite;
         }
 
-        @keyframes gentlePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.04); }
-        }
+        @keyframes gentlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
 
-        /* Photo Glow Ring */
         .photo-ring {
             background: linear-gradient(135deg, #f472b6, #c084fc, #60a5fa, #f472b6);
             background-size: 300% 300%;
             animation: gradientBorder 4s ease infinite;
         }
 
-        @keyframes gradientBorder {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        @keyframes gradientBorder { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* Candle Flame */
         .flame {
             width: 14px;
             height: 24px;
@@ -98,10 +65,7 @@
             cursor: pointer;
         }
 
-        @keyframes flicker {
-            0% { transform: scale(1) rotate(-2deg); }
-            100% { transform: scale(1.08) rotate(2deg); }
-        }
+        @keyframes flicker { 0% { transform: scale(1) rotate(-2deg); } 100% { transform: scale(1.08) rotate(2deg); } }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.07);
@@ -110,29 +74,25 @@
             border: 1px solid rgba(255, 255, 255, 0.16);
         }
 
-        .fade-in-up {
-            animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px) scale(0.96); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
+        .fade-in-up { animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center relative selection:bg-pink-500 selection:text-white">
 
-    <!-- Background Audio (Munbe Vaa BGM) -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="./birthday-song.mp3" type="audio/mpeg">
-    </audio>
+    <!-- ONLY ONE Background Audio Tag, pointing to bgm.mp3 -->
+    <audio id="bgMusic" loop preload="auto" src="./bgm.mp3"></audio>
 
     <!-- Floating Butterflies Container -->
     <div id="butterfly-layer"></div>
 
     <!-- Top Music Control Bar (Visible after opening box) -->
-  <!-- Background Audio (Munbe Vaa BGM) -->
-<audio id="bgMusic" loop preload="auto" src="./Munbe_Vaa_bgm____bgm_Whatsapp_status...(48k).mp3"></audio>  
+    <div id="musicBar" class="hidden fixed top-4 right-4 z-40">
+        <button id="musicToggleBtn" onclick="toggleMusic()" class="glass-card px-4 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/15 transition shadow-lg">
+            <span id="musicIcon">🔊</span>
+            <span id="musicStatus">Munbe Vaa BGM Playing</span>
+        </button>
+    </div>
 
     <!-- STEP 1: INITIAL SURPRISE GIFT BOX SCREEN -->
     <div id="introScreen" class="z-20 flex flex-col items-center justify-center text-center px-6 py-12 max-w-md mx-auto">
@@ -140,7 +100,6 @@
             ✨ A Special Delivery ✨
         </div>
 
-        <!-- Interactive Gift Box -->
         <div onclick="openSurpriseBox()" class="cursor-pointer group relative my-6">
             <div class="w-44 h-44 sm:w-52 sm:h-52 rounded-3xl glass-card box-glow flex flex-col items-center justify-center p-6 transition-transform duration-300 group-hover:scale-105 border-2 border-pink-400/40">
                 <div class="text-6xl sm:text-7xl mb-2 animate-bounce">🎁</div>
@@ -167,14 +126,13 @@
     <main id="mainCard" class="hidden z-20 w-full max-w-xl mx-auto px-4 py-10 sm:py-14 fade-in-up">
         <div class="glass-card rounded-3xl p-6 sm:p-10 text-center shadow-2xl relative overflow-hidden">
             
-            <!-- Top Butterfly Tag -->
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-200 text-xs sm:text-sm font-medium mb-6">
                 <span>🦋</span>
                 <span>Happy Birthday My Butterfly</span>
                 <span>🦋</span>
             </div>
 
-            <!-- Static Portrait Frame (No Upload Button for Visitors) -->
+            <!-- Static Portrait Frame -->
             <div class="relative w-44 h-44 sm:w-52 sm:h-52 mx-auto mb-6">
                 <div class="photo-ring w-full h-full rounded-full p-1.5 shadow-2xl">
                     <div class="w-full h-full rounded-full overflow-hidden bg-indigo-950 flex items-center justify-center relative">
@@ -183,7 +141,6 @@
                              alt="Sweetha"
                              class="w-full h-full object-cover"
                              onerror="this.style.display='none'; document.getElementById('photoFallback').style.display='flex';">
-                        <!-- Graceful fallback if sweetha-main.jpg is not added yet -->
                         <div id="photoFallback" style="display:none;" class="w-full h-full flex-col items-center justify-center bg-gradient-to-br from-purple-900 to-pink-900 text-pink-200 p-4">
                             <span class="text-5xl mb-1">🦋</span>
                             <span class="script-font text-3xl text-white">Sweetha</span>
@@ -195,7 +152,6 @@
                 </div>
             </div>
 
-            <!-- Heading & Romantic Birthday Message -->
             <h1 class="script-font text-5xl sm:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-white to-purple-300 mb-3">
                 Happy Birthday, Sweetha!
             </h1>
@@ -204,7 +160,6 @@
                 Just like a butterfly brings color and magic everywhere it flies, you fill every single moment with happiness, grace, and warmth. Wishing my favorite person the happiest birthday filled with endless smiles! 💜🦋
             </p>
 
-            <!-- Interactive Birthday Cake & Blowable Candle -->
             <div class="my-6 p-4 rounded-2xl bg-white/5 border border-white/10 inline-flex flex-col items-center">
                 <div id="candleArea" onclick="blowCandle()" class="flex flex-col items-center cursor-pointer group" title="Tap flame to make a wish">
                     <div id="candleFlame" class="flame mb-0.5"></div>
@@ -215,7 +170,6 @@
                 <p id="wishHint" class="text-xs text-pink-200/80 mt-2">Tap the candle flame to make a wish ✨</p>
             </div>
 
-            <!-- Action Buttons: Open Memories Album & Shower Love -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
                 <button onclick="openAlbumModal()" class="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 font-semibold text-sm sm:text-base shadow-lg shadow-pink-500/30 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
                     <span>📸</span>
@@ -230,46 +184,28 @@
         </div>
     </main>
 
-    <!-- STEP 3: MEMORY ALBUM MODAL (12 PHOTOS & VIDEOS) -->
+    <!-- STEP 3: MEMORY ALBUM MODAL -->
     <div id="albumModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col">
-        <!-- Modal Header -->
         <div class="flex items-center justify-between px-5 py-4 border-b border-white/10">
             <div>
                 <h2 class="script-font text-3xl sm:text-4xl text-pink-300">My butterfly's🦋🦋Memories 🦋</h2>
                 <p class="text-xs text-purple-200/75">Tap any photo or video to view full screen</p>
             </div>
-            <button onclick="closeAlbumModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-lg font-bold">
-                ✕
-            </button>
+            <button onclick="closeAlbumModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-lg font-bold">✕</button>
         </div>
-
-        <!-- 12-Item Responsive Grid -->
-        <div id="albumGrid" class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 max-w-5xl mx-auto w-full">
-            <!-- Populated dynamically via JS -->
-        </div>
+        <div id="albumGrid" class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 max-w-5xl mx-auto w-full"></div>
     </div>
 
     <!-- STEP 4: FULLSCREEN LIGHTBOX VIEWER -->
     <div id="lightbox" class="hidden fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-4">
-        <button onclick="closeLightbox()" class="absolute top-4 right-4 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white text-xl flex items-center justify-center">
-            ✕
-        </button>
-
-        <button onclick="navigateLightbox(-1)" class="absolute left-3 sm:left-6 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white text-xl flex items-center justify-center">
-            ‹
-        </button>
-
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white text-xl flex items-center justify-center">✕</button>
+        <button onclick="navigateLightbox(-1)" class="absolute left-3 sm:left-6 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white text-xl flex items-center justify-center">‹</button>
         <div id="lightboxContent" class="max-w-3xl max-h-[80vh] flex items-center justify-center"></div>
-
         <p id="lightboxCaption" class="text-pink-200 text-sm mt-4 font-medium"></p>
-
-        <button onclick="navigateLightbox(1)" class="absolute right-3 sm:right-6 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white text-xl flex items-center justify-center">
-            ›
-        </button>
+        <button onclick="navigateLightbox(1)" class="absolute right-3 sm:right-6 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white text-xl flex items-center justify-center">›</button>
     </div>
 
     <script>
-        // 12 Album Items (9 Photos + 3 Videos)
         const albumItems = [
             { type: 'image', src: './album/photo1.jpg', caption: 'Memory #1 🦋' },
             { type: 'image', src: './album/photo2.jpg', caption: 'Memory #2 ✨' },
@@ -291,7 +227,6 @@
         let fallbackAudioCtx = null;
         let fallbackInterval = null;
 
-        // Spawn Floating SVG Butterflies
         function createButterflies(count = 16) {
             const container = document.getElementById('butterfly-layer');
             const colors = ['#f472b6', '#e879f9', '#c084fc', '#60a5fa', '#fb7185'];
@@ -300,14 +235,10 @@
                 const b = document.createElement('div');
                 b.className = 'butterfly';
                 const size = Math.floor(Math.random() * 20) + 22;
-                const left = Math.random() * 95;
-                const duration = Math.random() * 10 + 10;
-                const delay = Math.random() * 10;
+                b.style.left = `${Math.random() * 95}vw`;
+                b.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                b.style.animationDelay = `-${Math.random() * 10}s`;
                 const color = colors[i % colors.length];
-
-                b.style.left = `${left}vw`;
-                b.style.animationDuration = `${duration}s`;
-                b.style.animationDelay = `-${delay}s`;
 
                 b.innerHTML = `
                     <svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none">
@@ -326,7 +257,6 @@
             }
         }
 
-        // Start Audio on Box Open (Plays ./birthday-song.mp3 or gentle Web Audio fallback)
         function startBirthdaySong() {
             const audio = document.getElementById('bgMusic');
             audio.volume = 0.85;
@@ -346,7 +276,6 @@
             };
         }
 
-        // Gentle Web Audio Fallback if MP3 file isn't uploaded yet
         function startFallbackPiano() {
             if (fallbackInterval) return;
             try {
@@ -394,7 +323,6 @@
             document.getElementById('musicStatus').textContent = playing ? 'Munbe Vaa BGM Playing' : 'Music Paused';
         }
 
-        // Open Surprise Box Sequence
         function openSurpriseBox() {
             startBirthdaySong();
 
@@ -410,7 +338,6 @@
             });
         }
 
-        // Blow Candle Interaction
         function blowCandle() {
             const flame = document.getElementById('candleFlame');
             if (flame.classList.contains('hidden')) return;
@@ -426,25 +353,11 @@
             });
         }
 
-        // Shower Extra Confetti & Butterflies
         function showerButterflies() {
-            confetti({
-                particleCount: 85,
-                angle: 60,
-                spread: 65,
-                origin: { x: 0 },
-                colors: ['#f472b6', '#e879f9', '#ffffff']
-            });
-            confetti({
-                particleCount: 85,
-                angle: 120,
-                spread: 65,
-                origin: { x: 1 },
-                colors: ['#c084fc', '#60a5fa', '#ffffff']
-            });
+            confetti({ particleCount: 85, angle: 60, spread: 65, origin: { x: 0 }, colors: ['#f472b6', '#e879f9', '#ffffff'] });
+            confetti({ particleCount: 85, angle: 120, spread: 65, origin: { x: 1 }, colors: ['#c084fc', '#60a5fa', '#ffffff'] });
         }
 
-        // Build 12-Item Album Grid
         function renderAlbumGrid() {
             const grid = document.getElementById('albumGrid');
             grid.innerHTML = '';
@@ -490,7 +403,6 @@
             document.getElementById('albumModal').classList.add('hidden');
         }
 
-        // Lightbox Controls (Auto-pauses BGM when playing videos)
         function openLightbox(index) {
             currentIndex = index;
             const item = albumItems[currentIndex];
@@ -549,7 +461,6 @@
             openLightbox(currentIndex);
         }
 
-        // Initialize Butterflies on Load
         createButterflies(16);
     </script>
 </body>
