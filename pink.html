@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday My Dear Butterfly🦋 Sweetha</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top, #2e1065, #1e1b4b, #090d16);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .script-font { font-family: 'Great Vibes', cursive; }
+
+        .butterfly {
+            position: fixed;
+            z-index: 5;
+            pointer-events: none;
+            animation: floatPath linear infinite;
+            filter: drop-shadow(0 0 8px rgba(232, 121, 249, 0.75));
+        }
+
+        .wing-left { transform-origin: right center; animation: flapLeft 0.35s ease-in-out infinite alternate; }
+        .wing-right { transform-origin: left center; animation: flapRight 0.35s ease-in-out infinite alternate; }
+
+        @keyframes flapLeft { 0% { transform: scaleX(1) rotate(0deg); } 100% { transform: scaleX(0.35) rotate(-12deg); } }
+        @keyframes flapRight { 0% { transform: scaleX(1) rotate(0deg); } 100% { transform: scaleX(0.35) rotate(12deg); } }
+
+        @keyframes floatPath {
+            0% { transform: translateY(105vh) translateX(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.95; }
+            50% { transform: translateY(50vh) translateX(45px) rotate(10deg); }
+            90% { opacity: 0.95; }
+            100% { transform: translateY(-15vh) translateX(-35px) rotate(-10deg); opacity: 0; }
+        }
+
+        .box-glow {
+            box-shadow: 0 0 40px rgba(236, 72, 153, 0.45), 0 0 80px rgba(168, 85, 247, 0.25);
+            animation: gentlePulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes gentlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+
+        .photo-ring {
+            background: linear-gradient(135deg, #f472b6, #c084fc, #60a5fa, #f472b6);
+            background-size: 300% 300%;
+            animation: gradientBorder 4s ease infinite;
+        }
+
+        @keyframes gradientBorder { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .flame {
+            width: 14px;
+            height: 24px;
+            background: radial-gradient(ellipse at bottom, #fff 10%, #fde047 45%, #f97316 85%, transparent 100%);
+            border-radius: 50% 50% 35% 35%;
+            animation: flicker 0.2s infinite alternate;
+            box-shadow: 0 0 18px #facc15, 0 0 32px #f97316;
+            cursor: pointer;
+        }
+
+        @keyframes flicker { 0% { transform: scale(1) rotate(-2deg); } 100% { transform: scale(1.08) rotate(2deg); } }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        .fade-in-up { animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center relative selection:bg-pink-500 selection:text-white">
+
+    <!-- ONLY ONE Background Audio Tag, pointing to bgm.mp3 -->
+    <audio id="bgMusic" loop preload="auto" src="bgm.mp3"></audio>
+
+    <!-- Floating Butterflies Container -->
+    <div id="butterfly-layer"></div>
+
+    <!-- Top Music Control Bar (Visible after opening box) -->
+    <div id="musicBar" class="hidden fixed top-4 right-4 z-40">
+        <button id="musicToggleBtn" onclick="toggleMusic()" class="glass-card px-4 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/15 transition shadow-lg">
+            <span id="musicIcon">🔊</span>
+            <span id="musicStatus">Munbe Vaa BGM Playing</span>
+        </button>
+    </div>
+
+    <!-- STEP 1: INITIAL SURPRISE GIFT BOX SCREEN -->
+    <div id="introScreen" class="z-20 flex flex-col items-center justify-center text-center px-6 py-12 max-w-md mx-auto">
+        <div class="mb-4 text-pink-300 text-sm tracking-widest uppercase font-semibold">
+            ✨ A Special Delivery ✨
+        </div>
+
+        <div onclick="openSurpriseBox()" class="cursor-pointer group relative my-6">
+            <div class="w-44 h-44 sm:w-52 sm:h-52 rounded-3xl glass-card box-glow flex flex-col items-center justify-center p-6 transition-transform duration-300 group-hover:scale-105 border-2 border-pink-400/40">
+                <div class="text-6xl sm:text-7xl mb-2 animate-bounce">🎁</div>
+                <span class="text-xs uppercase tracking-wider text-pink-200 font-semibold">Tap to Open</span>
+            </div>
+            <span class="absolute -top-4 -right-4 text-4xl animate-pulse">🦋</span>
+            <span class="absolute -bottom-3 -left-4 text-3xl animate-pulse">🦋</span>
+        </div>
+
+        <h1 class="script-font text-5xl sm:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-200 to-pink-300 mt-4 mb-2">
+            For My Dear Butterfly, Sweetha
+        </h1>
+        <p class="text-purple-200/85 text-sm sm:text-base mb-8">
+            Someone made something magical just for your special day...
+        </p>
+
+        <button onclick="openSurpriseBox()" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 font-semibold text-white shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 transform hover:-translate-y-0.5 transition active:scale-95 flex items-center gap-2">
+            <span>Open Birthday Surprise</span>
+            <span>🦋</span>
+        </button>
+    </div>
+
+    <!-- STEP 2: MAIN BIRTHDAY CARD REVEAL -->
+    <main id="mainCard" class="hidden z-20 w-full max-w-xl mx-auto px-4 py-10 sm:py-14 fade-in-up">
+        <div class="glass-card rounded-3xl p-6 sm:p-10 text-center shadow-2xl relative overflow-hidden">
+            
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-200 text-xs sm:text-sm font-medium mb-6">
+                <span>🦋</span>
+                <span>Happy Birthday My Dear Butterfly</span>
+                <span>🦋</span>
+            </div>
+
+            <!-- Static Portrait Frame -->
+            <div class="relative w-44 h-44 sm:w-52 sm:h-52 mx-auto mb-6">
+                <div class="photo-ring w-full h-full rounded-full p-1.5 shadow-2xl">
+                    <div class="w-full h-full rounded-full overflow-hidden bg-indigo-950 flex items-center justify-center relative">
+                        <img id="sweethaMainPhoto"
+                             src="./sweetha-main.jpg"
+                             alt="Sweetha"
+                             class="w-full h-full object-cover"
+                             onerror="this.style.display='none'; document.getElementById('photoFallback').style.display='flex';">
+                        <div id="photoFallback" style="display:none;" class="w-full h-full flex-col items-center justify-center bg-gradient-to-br from-purple-900 to-pink-900 text-pink-200 p-4">
+                            <span class="text-5xl mb-1">🦋</span>
+                            <span class="script-font text-3xl text-white">Sweetha</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-1 -right-1 w-11 h-11 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-xl shadow-lg border-2 border-white/30">
+                    🦋
+                </div>
+            </div>
+
+            <h1 class="script-font text-5xl sm:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-white to-purple-300 mb-3">
+                Happy Birthday, Sweetha!
+            </h1>
+
+            <p class="text-purple-100/90 text-sm sm:text-base leading-relaxed max-w-md mx-auto mb-6">
+                Just like a butterfly brings color and magic everywhere it flies, you fill every single moment with happiness, grace, and warmth. Wishing my favorite person the happiest birthday filled with endless smiles! 💜🦋
+            </p>
+
+            <div class="my-6 p-4 rounded-2xl bg-white/5 border border-white/10 inline-flex flex-col items-center">
+                <div id="candleArea" onclick="blowCandle()" class="flex flex-col items-center cursor-pointer group" title="Tap flame to make a wish">
+                    <div id="candleFlame" class="flame mb-0.5"></div>
+                    <div id="candleSmoke" class="hidden text-xs text-purple-200 animate-pulse mb-1">✨ Wish Made! ✨</div>
+                    <div class="w-2.5 h-8 bg-gradient-to-b from-pink-300 to-pink-500 rounded-sm"></div>
+                </div>
+                <div class="text-4xl -mt-1 select-none">🎂</div>
+                <p id="wishHint" class="text-xs text-pink-200/80 mt-2">Tap the candle flame to make a wish ✨</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
+                <button onclick="openAlbumModal()" class="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 font-semibold text-sm sm:text-base shadow-lg shadow-pink-500/30 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                    <span>📸</span>
+                    <span>Open Memory Album (16)</span>
+                </button>
+
+                <button onclick="showerButterflies()" class="w-full sm:w-auto px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 font-medium text-sm sm:text-base transition flex items-center justify-center gap-2">
+                    <span>🦋</span>
+                    <span>Shower Love</span>
+                </button>
+            </div>
+
+            <!-- Reopen Gift Button -->
+            <div class="mt-5 pt-4 border-t border-white/10">
+                <button onclick="reopenGift()" class="text-xs sm:text-sm text-pink-200/80 hover:text-white transition inline-flex items-center gap-2 px-4 py-2 rounded-full hover:bg-white/10">
+                    <span>🎁</span>
+                    <span>Reopen Gift Box</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- STEP 3: MEMORY ALBUM MODAL -->
+    <div id="albumModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-white/10">
+            <div>
+                <h2 class="script-font text-3xl sm:text-4xl text-pink-300">My Butterfly's🦋🦋Memories🦋🦋</h2>
+                <p class="text-xs text-purple-200/75">Tap any photo or video to view full screen</p>
+            </div>
+            <button onclick="closeAlbumModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-lg font-bold">✕</button>
+        </div>
+        <div id="albumGrid" class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 max-w-5xl mx-auto w-full"></div>
+    </div>
+
+    <!-- STEP 4: FULLSCREEN LIGHTBOX VIEWER -->
+    <div id="lightbox" class="hidden fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white text-xl flex items-center justify-center">✕</button>
+        <button onclick="navigateLightbox(-1)" class="absolute left-3 sm:left-6 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white text-xl flex items-center justify-center">‹</button>
+        <div id="lightboxContent" class="max-w-3xl max-h-[80vh] flex items-center justify-center"></div>
+        <p id="lightboxCaption" class="text-pink-200 text-sm mt-4 font-medium"></p>
+        <button onclick="navigateLightbox(1)" class="absolute right-3 sm:right-6 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white text-xl flex items-center justify-center">›</button>
+    </div>
+
+    <script>
+        const albumItems = [
+            { type: 'image', src: 'photo1.jpg', caption: 'Butterflies First World 🌎#1 🫀🌎🫀' },
+            { type: 'image', src: 'photo2.jpg', caption: 'Butterflies Family 🌎#2 ✨🫀🫀🫀✨' },
+            { type: 'image', src: 'photo3.jpg', caption: 'Butterflies Blood 🩸#3 🩸🫂💜' },
+            { type: 'video', src: 'video1.mp4', caption: 'Butterflies My Special Video #1 🎬🦋' },
+            { type: 'image', src: 'photo4.jpg', caption: 'Butterflies Memory #4 🌸' },
+            { type: 'image', src: 'photo5.jpg', caption: 'Butterflies Memory #5 🦋' },
+            { type: 'image', src: 'photo6.jpg', caption: 'Butterflies Memory #6 ✨' },
+            { type: 'video', src: 'video2.mp4', caption: 'Butterflies My Special Video #2 🎬💞' },
+            { type: 'image', src: 'photo7.jpg', caption: 'Butterflies Memory #7 💖' },
+            { type: 'image', src: 'photo8.jpg', caption: 'Butterflies Memory #8 🦋' },
+            { type: 'image', src: 'photo9.jpg', caption: 'Butterflies Memory #9 🌟' },
+            { type: 'video', src: 'video3.mp4', caption: 'Butterflies My Special Video #3 🎬🤗' },
+            { type: 'image', src: 'photo10.jpg', caption: 'Butterflies Memory #10 💖' },
+            { type: 'image', src: 'photo11.jpg', caption: 'Butterflies Memory #11 🦋' },
+            { type: 'image', src: 'photo12.jpg', caption: 'Butterflies Memory #12 🌟' },
+            { type: 'video', src: 'video4.mp4', caption: 'Butterflies My Special Video #4 🌎🦋🫀🫂' }
+        ];
+
+        let currentIndex = 0;
+        let isMusicPlaying = false;
+        let wasPlayingBeforeVideo = false;
+        let fallbackAudioCtx = null;
+        let fallbackInterval = null;
+
+        function createButterflies(count = 20) {
+            const container = document.getElementById('butterfly-layer');
+            const colors = ['#f472b6', '#e879f9', '#c084fc', '#60a5fa', '#fb7185'];
+
+            for (let i = 0; i < count; i++) {
+                const b = document.createElement('div');
+                b.className = 'butterfly';
+                const size = Math.floor(Math.random() * 20) + 22;
+                b.style.left = `${Math.random() * 95}vw`;
+                b.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                b.style.animationDelay = `-${Math.random() * 10}s`;
+                const color = colors[i % colors.length];
+
+                b.innerHTML = `
+                    <svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none">
+                        <g class="wing-left">
+                            <path d="M32 32C18 10 2 14 6 30C9 40 22 40 32 34Z" fill="${color}" fill-opacity="0.85"/>
+                            <path d="M32 34C20 40 10 52 18 56C25 59 31 46 32 36Z" fill="${color}" fill-opacity="0.7"/>
+                        </g>
+                        <g class="wing-right">
+                            <path d="M32 32C46 10 62 14 58 30C55 40 42 40 32 34Z" fill="${color}" fill-opacity="0.85"/>
+                            <path d="M32 34C44 40 54 52 46 56C39 59 33 46 32 36Z" fill="${color}" fill-opacity="0.7"/>
+                        </g>
+                        <rect x="30.5" y="20" width="3" height="24" rx="1.5" fill="#fff"/>
+                    </svg>
+                `;
+                container.appendChild(b);
+            }
+        }
+
+        function startBirthdaySong() {
+            const audio = document.getElementById('bgMusic');
+            audio.volume = 0.85;
+
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isMusicPlaying = true;
+                    updateMusicUI(true);
+                }).catch(() => {
+                    startFallbackPiano();
+                });
+            }
+
+            audio.onerror = () => {
+                startFallbackPiano();
+            };
+        }
+
+        function startFallbackPiano() {
+            if (fallbackInterval) return;
+            try {
+                fallbackAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const notes = [329.63, 369.99, 415.30, 493.88, 415.30, 369.99, 329.63, 277.18];
+                let step = 0;
+
+                const playNote = () => {
+                    if (!isMusicPlaying) return;
+                    const osc = fallbackAudioCtx.createOscillator();
+                    const gain = fallbackAudioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = notes[step % notes.length];
+                    gain.gain.setValueAtTime(0.08, fallbackAudioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, fallbackAudioCtx.currentTime + 0.9);
+                    osc.connect(gain);
+                    gain.connect(fallbackAudioCtx.destination);
+                    osc.start();
+                    osc.stop(fallbackAudioCtx.currentTime + 0.95);
+                    step++;
+                };
+
+                isMusicPlaying = true;
+                updateMusicUI(true);
+                playNote();
+                fallbackInterval = setInterval(playNote, 650);
+            } catch (e) {}
+        }
+
+        function toggleMusic() {
+            const audio = document.getElementById('bgMusic');
+            if (isMusicPlaying) {
+                audio.pause();
+                isMusicPlaying = false;
+                updateMusicUI(false);
+            } else {
+                audio.play().catch(() => {});
+                isMusicPlaying = true;
+                updateMusicUI(true);
+            }
+        }
+
+        function updateMusicUI(playing) {
+            document.getElementById('musicIcon').textContent = playing ? '🔊' : '🔇';
+            document.getElementById('musicStatus').textContent = playing ? 'Munbe Vaa BGM Playing' : 'Music Paused';
+        }
+
+        function openSurpriseBox() {
+            startBirthdaySong();
+
+            document.getElementById('introScreen').classList.add('hidden');
+            document.getElementById('mainCard').classList.remove('hidden');
+            document.getElementById('musicBar').classList.remove('hidden');
+
+            confetti({
+                particleCount: 110,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#f472b6', '#c084fc', '#60a5fa', '#fde047']
+            });
+        }
+
+        function reopenGift() {
+            const audio = document.getElementById('bgMusic');
+            audio.pause();
+            audio.currentTime = 0;
+            isMusicPlaying = false;
+            wasPlayingBeforeVideo = false;
+            updateMusicUI(false);
+
+            if (fallbackInterval) {
+                clearInterval(fallbackInterval);
+                fallbackInterval = null;
+            }
+
+            // Reset candle so she can blow it out again
+            document.getElementById('candleFlame').classList.remove('hidden');
+            document.getElementById('candleSmoke').classList.add('hidden');
+            document.getElementById('wishHint').textContent = 'Tap the candle flame to make a wish ✨';
+
+            // Switch back to the gift box screen
+            document.getElementById('mainCard').classList.add('hidden');
+            document.getElementById('musicBar').classList.add('hidden');
+            document.getElementById('introScreen').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function blowCandle() {
+            const flame = document.getElementById('candleFlame');
+            if (flame.classList.contains('hidden')) return;
+
+            flame.classList.add('hidden');
+            document.getElementById('candleSmoke').classList.remove('hidden');
+            document.getElementById('wishHint').textContent = 'May all your dreams come true, Sweetha! 🦋💜';
+
+            confetti({
+                particleCount: 90,
+                spread: 70,
+                origin: { y: 0.55 }
+            });
+        }
+
+        function showerButterflies() {
+            confetti({ particleCount: 85, angle: 60, spread: 65, origin: { x: 0 }, colors: ['#f472b6', '#e879f9', '#ffffff'] });
+            confetti({ particleCount: 85, angle: 120, spread: 65, origin: { x: 1 }, colors: ['#c084fc', '#60a5fa', '#ffffff'] });
+        }
+
+        function renderAlbumGrid() {
+            const grid = document.getElementById('albumGrid');
+            grid.innerHTML = '';
+
+            albumItems.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.onclick = () => openLightbox(idx);
+                card.className = 'group relative aspect-square rounded-2xl overflow-hidden bg-white/5 border border-white/15 cursor-pointer hover:border-pink-400 transition';
+
+                if (item.type === 'image') {
+                    card.innerHTML = `
+                        <img src="${item.src}" alt="${item.caption}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div style="display:none;" class="w-full h-full flex-col items-center justify-center text-pink-200/70 p-2 text-center">
+                            <span class="text-3xl mb-1">🦋</span>
+                            <span class="text-xs">${item.caption}</span>
+                        </div>
+                        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-2 text-xs text-white/90">
+                            ${item.caption}
+                        </div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <video src="${item.src}" muted playsinline class="w-full h-full object-cover group-hover:scale-105 transition duration-300"></video>
+                        <div class="absolute inset-0 bg-black/35 flex items-center justify-center">
+                            <div class="w-11 h-11 rounded-full bg-pink-500/90 text-white flex items-center justify-center shadow-lg">▶</div>
+                        </div>
+                        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-2 text-xs text-white/90">
+                            ${item.caption}
+                        </div>
+                    `;
+                }
+                grid.appendChild(card);
+            });
+        }
+
+        function openAlbumModal() {
+            renderAlbumGrid();
+            document.getElementById('albumModal').classList.remove('hidden');
+        }
+
+        function closeAlbumModal() {
+            document.getElementById('albumModal').classList.add('hidden');
+        }
+
+        function openLightbox(index) {
+            currentIndex = index;
+            const item = albumItems[currentIndex];
+            const container = document.getElementById('lightboxContent');
+            const caption = document.getElementById('lightboxCaption');
+            const bgMusic = document.getElementById('bgMusic');
+
+            container.innerHTML = '';
+            caption.textContent = `${item.caption} (${currentIndex + 1} / ${albumItems.length})`;
+
+            if (item.type === 'image') {
+                if (wasPlayingBeforeVideo && !isMusicPlaying) {
+                    bgMusic.play().catch(() => {});
+                    isMusicPlaying = true;
+                    updateMusicUI(true);
+                    wasPlayingBeforeVideo = false;
+                }
+                const img = document.createElement('img');
+                img.src = item.src;
+                img.className = 'max-h-[78vh] max-w-full rounded-2xl shadow-2xl border border-white/20';
+                container.appendChild(img);
+            } else {
+                if (isMusicPlaying) {
+                    wasPlayingBeforeVideo = true;
+                    bgMusic.pause();
+                    isMusicPlaying = false;
+                    updateMusicUI(false);
+                }
+                const video = document.createElement('video');
+                video.src = item.src;
+                video.controls = true;
+                video.autoplay = true;
+                video.playsInline = true;
+                video.className = 'max-h-[78vh] max-w-full rounded-2xl shadow-2xl border border-white/20';
+                container.appendChild(video);
+            }
+
+            document.getElementById('lightbox').classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxContent').innerHTML = '';
+            document.getElementById('lightbox').classList.add('hidden');
+
+            if (wasPlayingBeforeVideo) {
+                const bgMusic = document.getElementById('bgMusic');
+                bgMusic.play().catch(() => {});
+                isMusicPlaying = true;
+                updateMusicUI(true);
+                wasPlayingBeforeVideo = false;
+            }
+        }
+
+        function navigateLightbox(direction) {
+            currentIndex = (currentIndex + direction + albumItems.length) % albumItems.length;
+            openLightbox(currentIndex);
+        }
+
+        createButterflies(16);
+    </script>
+</body>
+</html>
